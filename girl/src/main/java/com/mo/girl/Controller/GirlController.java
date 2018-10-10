@@ -1,8 +1,10 @@
 package com.mo.girl.Controller;
 
 import com.mo.girl.Entity.Girl;
+import com.mo.girl.Entity.Result;
 import com.mo.girl.Repository.GirlRepository;
 import com.mo.girl.Service.GirlService;
+import com.mo.girl.Utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -38,14 +40,15 @@ public class GirlController {
      * @return
      */
     @PostMapping("/girls")
-    public Girl addGirl(@Valid Girl girl, BindingResult bindingResult){
+    public Result<Girl> addGirl(@Valid Girl girl, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult.getFieldError().getDefaultMessage());
-            return null;
+            //这里的异常和切面的afterReturning触发的异常是两回事
+            return ResultUtil.failure(1, bindingResult.getFieldError().getDefaultMessage());
         }
         girl.setCupSize(girl.getCupSize());
         girl.setAge(girl.getAge());
-        return girlRepository.save(girl);
+        girl.setMoney(girl.getMoney());
+        return ResultUtil.success(girlRepository.save(girl));
     }
 
     /**
@@ -97,5 +100,10 @@ public class GirlController {
     @PostMapping("/girls/addTwoGirls")
     public void addTwoGirls(){
         girlService.addTwoGirls();
+    }
+
+    @GetMapping("/girls/getAge/{id}")
+    public void getAge(@PathVariable("id") Integer id) throws Exception{
+        girlService.getAge(id);
     }
 }

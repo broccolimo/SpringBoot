@@ -1,6 +1,8 @@
 package com.mo.girl.Service;
 
 import com.mo.girl.Entity.Girl;
+import com.mo.girl.Enums.ResultEnum;
+import com.mo.girl.Exception.GirlException;
 import com.mo.girl.Repository.GirlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +40,23 @@ public class GirlService {
         girlB.setAge(18);
         girlB.setCupSize("BB");
         girlRepository.save(girlB);
+    }
+
+
+    /**
+     * 根据id获取age, 并通过统一异常处理的方式，输出相应内容
+     * @param id
+     * @throws GirlException
+     */
+    public void getAge(Integer id) throws GirlException{
+        Girl girl = girlRepository.findById(id).get();
+        Integer age = girl.getAge();
+        if(age < 13) throw new GirlException(ResultEnum.AGE_LEVEL_1);
+        else if(age < 18) throw new GirlException(ResultEnum.AGE_LEVEL_2);
+        throw new GirlException(ResultEnum.AGE_LEVEL_3);
+    }
+
+    public Girl findOneGirlById(Integer id){
+        return girlRepository.findById(id).get();
     }
 }

@@ -41,13 +41,21 @@ public class HttpAspect {
         logger.info("args={}", joinPoint.getArgs());
     }
 
+    /**
+     * @After相当于在try块中的return前执行
+     */
     @After("log()")
     public void doAfter(){
         logger.info("22222");
     }
 
+    /**
+     * @AfterReturning相当于在finally块中执行 发生在@After之后
+     * 也正是因为切点处return了一个对象，在此才能使用这个返回的对象
+     * @param object
+     */
     @AfterReturning(returning = "object", pointcut = "log()")
     public void doAfterReturning(Object object){
-        logger.info("response={}", object);
+        logger.info("response={}", object.toString());
     }
 }

@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author 音神
@@ -23,6 +24,10 @@ public class Girl {
 
     @Min(value = 18, message = "未成年少女禁止入内")
     private Integer age;
+
+    //注意Double是对象 可以是null double可不行
+    @NotNull(message = "金额不能为空")
+    private Double money;
 
     public Girl(){}
 
@@ -50,12 +55,21 @@ public class Girl {
         this.age = age;
     }
 
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
     @Override
     public String toString() {
         return "Girl{" +
                 "id=" + id +
                 ", cupSize='" + cupSize + '\'' +
                 ", age=" + age +
+                ", money=" + money +
                 '}';
     }
 }
